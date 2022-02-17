@@ -17,15 +17,18 @@ abstract class ApiControllers extends Controller
         $limit = (int)$request->get('limit', 100);
         $offset = (int)$request->get('offset', 0);
         $result = $this->model->limit($limit)->offset($offset)->get();
-        if (!$result){
+
+        if (!$result) {
             return $this->sendError('Not Found', 404);
         }
+
         return $this->sendResponse($result, 'OK', 200);
     }
 
     public function detail(int $entityId)
     {
         $entity = $this->model->find($entityId)->first();
+
         if (!$entity) {
             return $this->sendError('Not Found', 404);
         }
@@ -33,14 +36,26 @@ abstract class ApiControllers extends Controller
         return $this->sendResponse($entity, 'OK', 200);
     }
 
-    public function update(int $entityId = null, Request $request)
+    public function create(Request $request)
     {
-        $entity = $this->model->find($entityId)->first();
+        $data = $request->validated();
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $this->model->fill($data)->push();
+
+        return $this->sendResponse(null, 'Created', 201);
+    }
+
+    public function update(int $entityId, Request $request)
+    {
+        $entity = $this->model::find($entityId);
+
         if (!$entity) {
             return $this->sendError('Not Found', 404);
         }
+
         $data = $request->validated();
-        $this->model->fill($data)->push();
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $entity->fill($data)->save();
 
         return $this->sendResponse(null, 'Updated', 204);
     }
@@ -48,19 +63,13 @@ abstract class ApiControllers extends Controller
     public function delete(int $entityId = null)
     {
         $entity = $this->model->find($entityId);
+
         if (!$entity) {
             return $this->sendError('Not Found', 404);
         }
+
         $entity->delete();
 
         return $this->sendResponse(null, 'Deleted', 204);
-    }
-
-    public function create(Request $request)
-    {
-        $data = $request->validated();
-        $this->model->fill($data)->push();
-
-        return $this->sendResponse(null, 'Created', 201);
     }
 }

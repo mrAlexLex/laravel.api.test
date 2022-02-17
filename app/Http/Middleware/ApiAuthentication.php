@@ -22,7 +22,7 @@ class ApiAuthentication
             return $this->sendError( 'Unauthorized.', 401);
         }
 
-        //Брать токен из базы
+        //Брать токен пользователя
         if ($token !== config('services.api.token')) {
             return $this->sendError('Unauthorized.', 401);
         }

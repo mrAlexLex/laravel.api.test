@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMessageTable extends Migration
+class AddFieldsToServerCredentials extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,7 @@ class CreateMessageTable extends Migration
      */
     public function up()
     {
-        Schema::create('message', function (Blueprint $table) {
-            $table->bigIncrements('id')->unsigned();
-            $table->enum('author', ['client', 'manager']);
-            $table->text('content');
+        Schema::table('server_credentials', function (Blueprint $table) {
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
@@ -29,6 +26,9 @@ class CreateMessageTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('message');
+        Schema::table('server_credentials', function (Blueprint $table) {
+            $table->dropColumn('created_at');
+            $table->dropColumn('updated_at');
+        });
     }
 }

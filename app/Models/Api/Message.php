@@ -14,9 +14,7 @@ class Message extends Model
     protected $fillable = [
         'id',
         'author',
-        'content',
-        'created_at',
-        'update_at',
+        'content'
     ];
 
     protected $visible = [

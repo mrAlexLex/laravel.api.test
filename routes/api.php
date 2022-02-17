@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\TicketController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,13 +17,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/tickets')->group(function (){
     Route::get('/', [TicketController::class, 'get']);
-    Route::get('/{ticket_id}', [TicketController::class, 'detail'])->where(['ticket_id' => '[0-9+]']);
+    Route::get('/{ticket_id}', [TicketController::class, 'detail'])->where(['ticket_id' => '[0-9]+']);
     Route::post('/', [TicketController::class, 'createTicket']);
-    Route::delete('/{ticket_id}', [TicketController::class, 'delete'])->where(['ticket_id' => '[0-9+]']);
-    Route::put('/{ticket_id}', [TicketController::class, 'updateTicket'])->where(['ticket_id' => '[0-9+]']);
+    Route::delete('/{ticket_id}', [TicketController::class, 'delete'])->where(['ticket_id' => '[0-9]+']);
+    Route::put('/{ticket_id}', [TicketController::class, 'updateTicket'])->where(['ticket_id' => '[0-9]+']);
 });
 
-
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+Route::prefix('/message')->group(function (){
+    Route::get('/', [MessageController::class, 'get']);
+    Route::get('/{message_id}', [MessageController::class, 'detail'])->where(['message_id' => '[0-9]+']);
+    Route::post('/', [MessageController::class, 'createMessage']);
+    Route::delete('/{message_id}', [MessageController::class, 'delete'])->where(['message_id' => '[0-9]+']);
+    Route::put('/{message_id}', [MessageController::class, 'updateMessage'])->where(['message_id' => '[0-9]+']);
+});
