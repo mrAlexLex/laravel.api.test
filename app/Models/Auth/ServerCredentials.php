@@ -5,7 +5,6 @@ namespace App\Models\Auth;
 
 
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class ServerCredentials extends User

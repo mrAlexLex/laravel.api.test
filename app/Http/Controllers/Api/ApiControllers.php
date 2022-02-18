@@ -27,7 +27,7 @@ abstract class ApiControllers extends Controller
 
     public function detail(int $entityId)
     {
-        $entity = $this->model->find($entityId)->first();
+        $entity = $this->model->find($entityId);
 
         if (!$entity) {
             return $this->sendError('Not Found', 404);
@@ -42,7 +42,7 @@ abstract class ApiControllers extends Controller
         $data['created_at'] = date('Y-m-d H:i:s');
         $this->model->fill($data)->push();
 
-        return $this->sendResponse(null, 'Created', 201);
+        return $this->sendResponse($this->model, 'Created', 200);
     }
 
     public function update(int $entityId, Request $request)
@@ -57,7 +57,7 @@ abstract class ApiControllers extends Controller
         $data['updated_at'] = date('Y-m-d H:i:s');
         $entity->fill($data)->save();
 
-        return $this->sendResponse(null, 'Updated', 204);
+        return $this->sendResponse($entity, 'Updated', 200);
     }
 
     public function delete(int $entityId = null)
@@ -70,6 +70,6 @@ abstract class ApiControllers extends Controller
 
         $entity->delete();
 
-        return $this->sendResponse(null, 'Deleted', 204);
+        return $this->sendResponse($entity, 'Deleted', 200);
     }
 }

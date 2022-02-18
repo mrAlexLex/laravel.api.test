@@ -19,6 +19,7 @@ class Ticket extends Model
     ];
 
     protected $visible = [
+        'id',
         'uid',
         'subject',
         'user_name',

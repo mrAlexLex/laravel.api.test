@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pages\IndexController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,10 +20,36 @@ use Illuminate\Support\Facades\Route;
 //Route::view('/', 'index');
 
 Route::name('tickets.')->group(function () {
-    Route::view('/tickets', 'ticket/index')
+    Route::get('/', [IndexController::class, 'index'])
         ->middleware('auth')
         ->name('tickets');
+    Route::get('/{ticket_id}', [IndexController::class, 'detail'])
+        ->where(['ticket_id' => '[0-9]+'])
+        ->name('detail');
 
+    Route::get('/create', function () {
+        return view('ticket/create');
+    })->name('create');
+    Route::post('/create', [IndexController::class, 'create']);
+
+    Route::get('/update/{ticket_id}', function ($id){
+        $response = Http::withHeaders([
+            'x-api-key' => 'asd2343asdasaYdnnas89932asdasd'
+        ])->get('http://127.0.0.1:8001/api/v1/tickets/' . $id)->json();
+
+        return view('ticket/create', [
+            'ticket' => $response['success'] ? $response['data'] : null
+        ]);
+    })
+        ->where(['ticket_id' => '[0-9]+'])
+        ->name('update');
+    Route::post('/update/{ticket_id}', [IndexController::class, 'update']);
+
+    Route::get('/delete/{ticket_id}', [IndexController::class, 'delete'])
+        ->where(['ticket_id' => '[0-9]+'])
+        ->name('delete');
+
+    //Auth
     Route::get('/login', function () {
         if (Auth::check()) {
             return redirect((route('tickets')));
@@ -30,7 +57,6 @@ Route::name('tickets.')->group(function () {
         return view('auth/login');
     })
         ->name('login');
-
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/registration', function () {
@@ -43,8 +69,3 @@ Route::name('tickets.')->group(function () {
     Route::post('/registration', [AuthController::class, 'save']);
 
 });
-//Route::get('/', [IndexController::class, 'index']);
-//Route::get('/create', [IndexController::class, 'create']);
-//Route::get('/update', [IndexController::class, 'update']);
-//Route::get('/delete', [IndexController::class, 'delete']);
-

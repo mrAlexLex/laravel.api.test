@@ -9,10 +9,10 @@ class TicketRequest extends ApiRequest
     public function rules()
     {
         return [
-            'uid' => 'required|string',
-            'subject' => 'required|string',
-            'user_name' => 'required|string',
-            'user_email' => 'required|string'
+            'uid' => 'required|string|unique:ticket',
+            'subject' => 'required|string|min:10',
+            'user_name' => 'required|string|min:10|max:100|regex:/^\S*$/u',
+            'user_email' => 'required|email'
         ];
     }
 
