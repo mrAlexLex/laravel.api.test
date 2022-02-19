@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldsToServerCredentials extends Migration
+class AddFieldsAccessToServerCredentials extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddFieldsToServerCredentials extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->smallInteger('access')->default(0);
         });
     }
 
@@ -27,8 +26,7 @@ class AddFieldsToServerCredentials extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('created_at');
-            $table->dropColumn('updated_at');
+            $table->dropColumn('access');
         });
     }
 }

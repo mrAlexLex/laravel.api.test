@@ -5,6 +5,7 @@ namespace App\Models\Api;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Ticket extends Model
 {

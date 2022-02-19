@@ -9,19 +9,20 @@ use Illuminate\Support\Str;
 
 class ServerCredentials extends User
 {
-
-    protected $table = 'server_credentials';
+    public $table = 'users';
 
     protected $fillable = [
         'ftp_login',
         'ftp_password',
         'auth_token',
+        'access',
     ];
 
     protected $visible = [
         'ftp_login',
         'ftp_password',
-        'auth_token'
+        'auth_token',
+        'access'
     ];
 
     public function setFtpLoginAttribute($ftp_login)

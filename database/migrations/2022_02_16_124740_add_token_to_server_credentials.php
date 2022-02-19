@@ -13,7 +13,7 @@ class AddTokenToServerCredentials extends Migration
      */
     public function up()
     {
-        Schema::table('server_credentials', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->string('auth_token', 80)
                 ->after('ftp_password')
                 ->unique()
@@ -29,7 +29,7 @@ class AddTokenToServerCredentials extends Migration
      */
     public function down()
     {
-        Schema::table('server_credentials', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('auth_token');
         });
     }

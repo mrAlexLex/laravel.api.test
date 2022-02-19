@@ -5,17 +5,25 @@ namespace App\Http\Controllers\Pages;
 
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use App\Http\Requests\TicketRequest;
+use App\Services\TicketService;
 
 class IndexController extends Controller
 {
 
+    protected $createTicketService;
+
+    /**
+     * IndexController constructor.
+     */
+    public function __construct()
+    {
+        $this->createTicketService = new TicketService();
+    }
+
     public function index()
     {
-        $response = Http::withHeaders([
-            'x-api-key' => 'asd2343asdasaYdnnas89932asdasd'
-        ])->get('http://127.0.0.1:8001/api/v1/tickets')->json();
+        $response = $this->createTicketService->getAll();
 
         return view('ticket/index', [
             'tickets' => $response['success'] ? $response['data'] : null
@@ -24,32 +32,21 @@ class IndexController extends Controller
 
     public function detail($id)
     {
-        $response = Http::withHeaders([
-            'x-api-key' => 'asd2343asdasaYdnnas89932asdasd'
-        ])->get('http://127.0.0.1:8001/api/v1/tickets/' . $id)->json();
+        $response = $this->createTicketService->getOne($id);
 
         return view('ticket/detail', [
             'ticket' => $response['success'] ? $response['data'] : null
         ]);
     }
 
-    public function create(Request $request)
+    public function create(TicketRequest $request)
     {
-        $validateFields = $request->validate([
-            'subject' => 'required|string',
-            'user_name' => 'required|string',
-            'user_email' => 'required|email',
-        ]);
+        $response = $this->createTicketService->create($request);
 
-        $validateFields['uid'] = 'fdsge';//брать у пользователя
-        //проверка на существование записи
+        if (isset($response['success']) && $response['success']) {
+            $this->createTicketService->sendEmail($response);
+            $this->createTicketService->sendRequest($response);
 
-        $response = Http::withHeaders([
-            'x-api-key' => 'asd2343asdasaYdnnas89932asdasd'//брать у пользователя
-        ])->post('http://127.0.0.1:8001/api/v1/tickets/', $validateFields)->json();
-
-
-        if (isset($response['success']) && $response['success']){
             return redirect(route('tickets.tickets'));
         }
 
@@ -58,21 +55,11 @@ class IndexController extends Controller
         ]);
     }
 
-    public function update(int $id, Request $request)
+    public function update(int $id, TicketRequest $request)
     {
-        $validateFields = $request->validate([
-            'subject' => 'required|string',
-            'user_name' => 'required|string',
-            'user_email' => 'required|email',
-        ]);
+        $response = $this->createTicketService->update($id, $request);
 
-        $validateFields['uid'] = 'dasd223';//брать у пользователя
-
-        $response = Http::withHeaders([
-            'x-api-key' => 'asd2343asdasaYdnnas89932asdasd'//брать у пользователя
-        ])->put('http://127.0.0.1:8001/api/v1/tickets/' . $id, $validateFields)->json();
-
-        if (isset($response['success']) && $response['success']){
+        if (isset($response['success']) && $response['success']) {
             return redirect(route('tickets.tickets'));
         }
 
@@ -84,11 +71,9 @@ class IndexController extends Controller
 
     public function delete(int $id)
     {
-        $response = Http::withHeaders([
-            'x-api-key' => 'asd2343asdasaYdnnas89932asdasd'//брать у пользователя
-        ])->delete('http://127.0.0.1:8001/api/v1/tickets/' . $id)->json();
+        $response = $this->createTicketService->delete($id);
 
-        if (isset($response) && $response['success']){
+        if (isset($response) && $response['success']) {
             return redirect(route('tickets.tickets'));
         }
 

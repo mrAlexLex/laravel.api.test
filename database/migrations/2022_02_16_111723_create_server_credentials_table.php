@@ -13,7 +13,7 @@ class CreateServerCredentialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('server_credentials', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
             $table->string('ftp_login', 64)->unique();
             $table->string('ftp_password', 64);
@@ -27,6 +27,6 @@ class CreateServerCredentialsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('server_credentials');
+        Schema::dropIfExists('users');
     }
 }

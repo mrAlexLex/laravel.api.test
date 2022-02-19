@@ -44,7 +44,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect(route('/'));
+        return redirect(route('tickets.tickets'));
     }
 
     public function login(Request $request)

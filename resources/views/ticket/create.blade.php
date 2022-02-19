@@ -6,6 +6,9 @@
     <div class="row">
         <form class="col-10 offset-1" method="POST" action="@if(!isset($ticket)) {{route('tickets.create')}} @else {{route('tickets.update', $ticket['id'])}} @endif">
             @csrf
+            @error('formError')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
             <div class="form-group">
                 <label for="text" class="col-form-label-lg">Тема</label>
                 <input type="text" class="form-control" id="subject" name="subject" value="{{ isset($ticket) ? $ticket['subject'] : '' }}" placeholder="Введите тему">
