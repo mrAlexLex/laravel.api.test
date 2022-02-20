@@ -4,7 +4,6 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pages\IndexController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,7 +53,6 @@ Route::name('tickets.')->group(function () {
         ->where(['ticket_id' => '[0-9]+'])
         ->name('delete');
 
-    //Auth
     Route::get('/login', function () {
         if (Auth::check()) {
             return redirect((route('tickets')));

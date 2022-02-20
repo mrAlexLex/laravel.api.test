@@ -20,11 +20,6 @@ class TicketService
             'x-api-key' => Auth::user()->auth_token
         ])->get('http://127.0.0.1:8001/api/v1/tickets')->json();
 
-        /*
-         *
-         * Обработка ответа API
-         *
-         */
     }
 
     public function getOne(int $id)
@@ -32,12 +27,6 @@ class TicketService
         return Http::withHeaders([
             'x-api-key' => Auth::user()->auth_token
         ])->get('http://127.0.0.1:8001/api/v1/tickets/' . $id)->json();
-
-        /*
-         *
-         * Обработка ответа API
-         *
-         */
     }
 
     public function create(TicketRequest $request)
@@ -69,6 +58,16 @@ class TicketService
     public function sendEmail($response)
     {
         Mail::to($response['data']['user_email'])->send(new ApiMail('from@example.com'));
+
+        $request = [
+            'author' => Auth::user()->access == 1 ? 'manager' : 'client',
+            'content' => $response['data']['subject'],
+        ];
+
+        return Http::withHeaders([
+            'x-api-key' => Auth::user()->auth_token
+        ])->post('http://127.0.0.1:8001/api/v1/message/', $request)->json();
+
     }
 
     public function sendRequest($response)

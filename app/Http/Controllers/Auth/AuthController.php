@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Models\Auth\ServerCredentials;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,28 +13,26 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function save(Request $request)
+    public function save(UserRequest $request)
     {
-        $validateFields = $request->validate([
-            'ftp_login' => 'required|string',
-            'ftp_password' => 'required|string',
-        ]);
+        $validateFields = $request->validated();
+        $loginHashFields =  hash('sha256', $validateFields['ftp_login']);
+        $user = ServerCredentials::where('ftp_login', $loginHashFields)->first();
 
-        /*
-         *
-         * Проверка существования пользователя
-         * Если есть редирект на регистрацию с ошибкой
-         *
-         */
-
-        $user = new ServerCredentials();
-        $user->fill($validateFields);
-        $user->setAuthTokenAttribute();
-        if ($user->save()){
-            Auth::login($user);
-            if (Auth::check()){
-                return redirect(route('tickets.tickets'));
+        if (!$user){
+            $user = new ServerCredentials();
+            $user->fill($validateFields);
+            $user->setAuthTokenAttribute();
+            if ($user->save()){
+                Auth::login($user);
+                if (Auth::check()){
+                    return redirect(route('tickets.tickets'));
+                }
             }
+        }else{
+            return redirect(route('tickets.registration'))->withErrors([
+                'formError' => 'Пользователь уже существует'
+            ]);
         }
 
         return redirect(route('tickets.login'))->withErrors([

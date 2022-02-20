@@ -4,8 +4,8 @@
 namespace App\Models\Api;
 
 
+use App\Models\Utils\TextValidation;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Ticket extends Model
 {
@@ -28,4 +28,12 @@ class Ticket extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function setSubjectAttribute($subject)
+    {
+        $this->attributes['subject'] = (new TextValidation($subject))
+            ->clearProfanity()
+            ->clearTags()
+            ->getStr();
+    }
 }

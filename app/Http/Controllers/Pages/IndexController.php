@@ -47,7 +47,7 @@ class IndexController extends Controller
             $this->createTicketService->sendEmail($response);
             $this->createTicketService->sendRequest($response);
 
-            return redirect(route('tickets.tickets'));
+            return redirect(route('tickets.tickets'))->with('message', 'Тикет успешно добавлен!');
         }
 
         return redirect(route('tickets.create'))->withErrors([

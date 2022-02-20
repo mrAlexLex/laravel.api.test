@@ -9,8 +9,6 @@ use App\Models\Api\Ticket;
 
 class TicketController extends ApiControllers
 {
-
-
     /**
      * TicketController constructor.
      */

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Requests\MessageRequest;
-use App\Http\Requests\TicketRequest;
+use App\Http\Requests\UserRequest;
 use App\Models\Api\Message;
 use App\Models\Api\Ticket;
 

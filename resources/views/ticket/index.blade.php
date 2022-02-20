@@ -1,6 +1,11 @@
 @extends('layout')
 @section('content')
     <h1>Tickets list</h1>
+    @if(session()->has('message'))
+        <div class="alert alert-success">
+            {{ session()->get('message') }}
+        </div>
+    @endif
     <div class="row">
         <a class="btn btn-outline-primary col-1 offset-11" href="/create" >Добавить</a>
     </div>

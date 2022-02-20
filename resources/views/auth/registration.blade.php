@@ -1,6 +1,9 @@
 @extends('layout')
 @section('content')
     <h1 class="">Регистрация</h1>
+    @error('formError')
+    <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
     <form class="col-3 offset-4" method="POST" action="{{route('tickets.registration')}}">
         @csrf
         <div class="form-group">
