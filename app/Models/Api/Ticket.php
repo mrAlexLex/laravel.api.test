@@ -25,6 +25,7 @@ class Ticket extends Model
         'subject',
         'user_name',
         'user_email',
+        'messages',
         'created_at',
         'updated_at',
     ];
@@ -35,5 +36,10 @@ class Ticket extends Model
             ->clearProfanity()
             ->clearTags()
             ->getStr();
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'ticket_id', 'uid');
     }
 }

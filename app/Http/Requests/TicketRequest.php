@@ -12,7 +12,8 @@ class TicketRequest extends ApiRequest
             'uid' => 'string|unique:ticket',
             'subject' => 'required|string|min:6',
             'user_name' => 'required|string|min:3|max:100|regex:/^\S*$/u',
-            'user_email' => 'required|email'
+            'user_email' => 'required|email',
+            'message' => 'required|string|min:3|max:100'
         ];
     }
 

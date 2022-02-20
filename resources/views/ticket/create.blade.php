@@ -30,6 +30,13 @@
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="form-group">
+                <label for="text" class="col-form-label-lg">Текст сообщения</label>
+                <textarea class="form-control" id="message" name="message"  placeholder="Введите текст сообщения"></textarea>
+                @error('message')
+                <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            </div>
             <div class="row">
                 <div class="form-group">
                     <button class="btn btn-outline-primary col-2 offset-10">Сохранить</button>

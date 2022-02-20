@@ -44,7 +44,6 @@ class IndexController extends Controller
         $response = $this->createTicketService->create($request);
 
         if (isset($response['success']) && $response['success']) {
-            $this->createTicketService->sendEmail($response);
             $this->createTicketService->sendRequest($response);
 
             return redirect(route('tickets.tickets'))->with('message', 'Тикет успешно добавлен!');
@@ -66,7 +65,6 @@ class IndexController extends Controller
         return redirect(route('tickets.update', $id))->withErrors([
             'formError' => 'Не удалось обновить тикет'
         ]);
-
     }
 
     public function delete(int $id)

@@ -73,6 +73,12 @@
                                     <td colspan="2">User email</td>
                                     <td class="text-end">{{$ticket['user_email']}}</td>
                                 </tr>
+                                <tr>
+                                    <td colspan="2">Message</td>
+                                    @foreach($ticket['messages'] as $message)
+                                    <td class="text-end">{{$message['content']}}</td>
+                                    @endforeach
+                                </tr>
                                 </tfoot>
                             </table>
                         </div>

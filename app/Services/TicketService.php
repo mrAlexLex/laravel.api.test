@@ -34,6 +34,8 @@ class TicketService
         $validateFields = $request->validated();
         $validateFields['uid'] = (string)Str::uuid();
 
+        $this->sendEmail($validateFields);
+
         return Http::withHeaders([
             'x-api-key' => Auth::user()->auth_token
         ])->post('http://127.0.0.1:8001/api/v1/tickets/', $validateFields)->json();
@@ -57,11 +59,12 @@ class TicketService
 
     public function sendEmail($response)
     {
-        Mail::to($response['data']['user_email'])->send(new ApiMail('from@example.com'));
+        Mail::to($response['user_email'])->send(new ApiMail('from@example.com'));
 
         $request = [
             'author' => Auth::user()->access == 1 ? 'manager' : 'client',
-            'content' => $response['data']['subject'],
+            'content' => $response['message'],
+            'ticket_id' => $response['uid'],
         ];
 
         return Http::withHeaders([

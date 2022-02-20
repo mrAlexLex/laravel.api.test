@@ -10,7 +10,8 @@ class MessageRequest extends ApiRequest
     {
         return [
             'author' => 'required|string',
-            'content' => 'required|string'
+            'content' => 'required|string',
+            'ticket_id' => 'required|string',
         ];
     }
 
@@ -18,7 +19,8 @@ class MessageRequest extends ApiRequest
     {
         return [
             'author.required' => 'Обязательное поле для заполнения!',
-            'content.required' => 'Обязательное поле для заполнения!'
+            'content.required' => 'Обязательное поле для заполнения!',
+            'ticket_id.required' => 'Обязательное поле для заполнения!'
         ];
     }
 

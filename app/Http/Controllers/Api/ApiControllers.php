@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Api\Ticket;
 use Illuminate\Http\Request;
 
 abstract class ApiControllers extends Controller
@@ -16,7 +17,12 @@ abstract class ApiControllers extends Controller
     {
         $limit = (int)$request->get('limit', 100);
         $offset = (int)$request->get('offset', 0);
-        $result = $this->model->limit($limit)->offset($offset)->get();
+
+        if ($this->model instanceof Ticket){
+            $result = $this->model::with('messages')->limit($limit)->offset($offset)->get();
+        }else{
+            $result = $this->model->limit($limit)->offset($offset)->get();
+        }
 
         if (!$result) {
             return $this->sendError('Not Found', 404);
@@ -27,7 +33,12 @@ abstract class ApiControllers extends Controller
 
     public function detail(int $entityId)
     {
-        $entity = $this->model->find($entityId);
+        if ($this->model instanceof Ticket){
+            $entity = $this->model::with('messages')->find($entityId);
+        }else{
+            $entity = $this->model->find($entityId);
+        }
+
 
         if (!$entity) {
             return $this->sendError('Not Found', 404);
