@@ -17,12 +17,7 @@ abstract class ApiControllers extends Controller
     {
         $limit = (int)$request->get('limit', 100);
         $offset = (int)$request->get('offset', 0);
-
-        if ($this->model instanceof Ticket){
-            $result = $this->model::with('messages')->limit($limit)->offset($offset)->get();
-        }else{
-            $result = $this->model->limit($limit)->offset($offset)->get();
-        }
+        $result = $this->model->limit($limit)->offset($offset)->get();
 
         if (!$result) {
             return $this->sendError('Not Found', 404);
@@ -33,12 +28,7 @@ abstract class ApiControllers extends Controller
 
     public function detail(int $entityId)
     {
-        if ($this->model instanceof Ticket){
-            $entity = $this->model::with('messages')->find($entityId);
-        }else{
-            $entity = $this->model->find($entityId);
-        }
-
+        $entity = $this->model->find($entityId);
 
         if (!$entity) {
             return $this->sendError('Not Found', 404);
@@ -50,7 +40,6 @@ abstract class ApiControllers extends Controller
     public function create(Request $request)
     {
         $data = $request->validated();
-        $data['created_at'] = date('Y-m-d H:i:s');
         $this->model->fill($data)->push();
 
         return $this->sendResponse($this->model, 'Created', 200);

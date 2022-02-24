@@ -7,11 +7,21 @@ namespace App\Models\Api;
 use App\Models\Utils\TextValidation;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Ticket
+ * @package App\Models\Api
+ */
 class Ticket extends Model
 {
 
+    /**
+     * @var string
+     */
     protected $table = 'ticket';
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'uid',
         'subject',
@@ -19,6 +29,9 @@ class Ticket extends Model
         'user_email'
     ];
 
+    /**
+     * @var string[]
+     */
     protected $visible = [
         'id',
         'uid',
@@ -30,6 +43,9 @@ class Ticket extends Model
         'updated_at',
     ];
 
+    /**
+     * @param $subject
+     */
     public function setSubjectAttribute($subject)
     {
         $this->attributes['subject'] = (new TextValidation($subject))
@@ -38,6 +54,9 @@ class Ticket extends Model
             ->getStr();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function messages()
     {
         return $this->hasMany(Message::class, 'ticket_id', 'uid');

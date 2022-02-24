@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\TicketRequest;
 use App\Models\Api\Ticket;
+use Illuminate\Http\Request;
 
 class TicketController extends ApiControllers
 {
@@ -15,6 +16,38 @@ class TicketController extends ApiControllers
     public function __construct(Ticket $model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function get(Request $request)
+    {
+        $limit = (int)$request->get('limit', 100);
+        $offset = (int)$request->get('offset', 0);
+        $result = $this->model::with('messages')->limit($limit)->offset($offset)->get();
+
+        if (!$result) {
+            return $this->sendError('Not Found', 404);
+        }
+
+        return $this->sendResponse($result, 'OK', 200);
+    }
+
+    /**
+     * @param int $entityId
+     * @return mixed
+     */
+    public function detail(int $entityId)
+    {
+        $entity = $this->model::with('messages')->find($entityId);
+
+        if (!$entity) {
+            return $this->sendError('Not Found', 404);
+        }
+
+        return $this->sendResponse($entity, 'OK', 200);
     }
 
     /**

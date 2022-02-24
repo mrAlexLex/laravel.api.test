@@ -11,8 +11,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
+/**
+ * Class AuthController
+ * @package App\Http\Controllers\Auth
+ */
 class AuthController extends Controller
 {
+    /**
+     * @param UserRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function save(UserRequest $request)
     {
         $validateFields = $request->validated();
@@ -40,12 +48,19 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function logout()
     {
         Auth::logout();
         return redirect(route('tickets.tickets'));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function login(Request $request)
     {
         $loginFields = $request->only(['ftp_login', 'ftp_password']);

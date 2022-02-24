@@ -4,13 +4,23 @@
 namespace App\Models\Utils;
 
 
+/**
+ * Class TextValidation
+ * @package App\Models\Utils
+ */
 class TextValidation
 {
+    /**
+     * @var string[]
+     */
     protected $del_ = [
         'test',
         'tests'
     ];
 
+    /**
+     * @var string
+     */
     protected $str = '';
 
     /**
@@ -32,6 +42,9 @@ class TextValidation
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function clearTags(): TextValidation
     {
         $this->str = strip_tags($this->str);

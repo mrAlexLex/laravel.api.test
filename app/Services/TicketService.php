@@ -5,15 +5,20 @@ namespace App\Services;
 
 
 use App\Http\Requests\TicketRequest;
-use App\Mail\ApiMail;
 use App\Models\Reqres\ReqresCreate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
+/**
+ * Class TicketService
+ * @package App\Services
+ */
 class TicketService
 {
+    /**
+     * @return array|mixed
+     */
     public function getAll()
     {
         return Http::withHeaders([
@@ -22,6 +27,10 @@ class TicketService
 
     }
 
+    /**
+     * @param int $id
+     * @return array|mixed
+     */
     public function getOne(int $id)
     {
         return Http::withHeaders([
@@ -29,18 +38,25 @@ class TicketService
         ])->get('http://127.0.0.1:8001/api/v1/tickets/' . $id)->json();
     }
 
+    /**
+     * @param TicketRequest $request
+     * @return array|mixed
+     */
     public function create(TicketRequest $request)
     {
         $validateFields = $request->validated();
         $validateFields['uid'] = (string)Str::uuid();
-
-        $this->sendEmail($validateFields);
 
         return Http::withHeaders([
             'x-api-key' => Auth::user()->auth_token
         ])->post('http://127.0.0.1:8001/api/v1/tickets/', $validateFields)->json();
     }
 
+    /**
+     * @param int $id
+     * @param TicketRequest $request
+     * @return array|mixed
+     */
     public function update(int $id, TicketRequest $request)
     {
         $validateFields = $request->validated();
@@ -50,6 +66,10 @@ class TicketService
         ])->put('http://127.0.0.1:8001/api/v1/tickets/' . $id, $validateFields)->json();
     }
 
+    /**
+     * @param int $id
+     * @return array|mixed
+     */
     public function delete(int $id)
     {
         return Http::withHeaders([
@@ -57,22 +77,9 @@ class TicketService
         ])->delete('http://127.0.0.1:8001/api/v1/tickets/' . $id)->json();
     }
 
-    public function sendEmail($response)
-    {
-        Mail::to($response['user_email'])->send(new ApiMail('from@example.com'));
-
-        $request = [
-            'author' => Auth::user()->access == 1 ? 'manager' : 'client',
-            'content' => $response['message'],
-            'ticket_id' => $response['uid'],
-        ];
-
-        return Http::withHeaders([
-            'x-api-key' => Auth::user()->auth_token
-        ])->post('http://127.0.0.1:8001/api/v1/message/', $request)->json();
-
-    }
-
+    /**
+     * @param $response
+     */
     public function sendRequest($response)
     {
         $reqresResponse = new ReqresCreate();
