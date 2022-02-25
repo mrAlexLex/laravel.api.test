@@ -22,7 +22,6 @@
         </tr>
         </thead>
         <tbody>
-
         @foreach($tickets as $ticket)
         <tr>
             <th scope="row"><a href="/{{$ticket['id']}}">{{ $ticket['uid'] }}</a></th>

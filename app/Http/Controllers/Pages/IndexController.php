@@ -45,7 +45,7 @@ class IndexController extends Controller
         $response = $this->ticketService->getAll();
 
         return view('ticket/index', [
-            'tickets' => $response['success'] ? $response['data'] : null
+            'tickets' => $response['data'] ?? null
         ]);
     }
 
@@ -58,7 +58,7 @@ class IndexController extends Controller
         $response = $this->ticketService->getOne($id);
 
         return view('ticket/detail', [
-            'ticket' => $response['success'] ? $response['data'] : null
+            'ticket' => $response['data'] ?? null
         ]);
     }
 

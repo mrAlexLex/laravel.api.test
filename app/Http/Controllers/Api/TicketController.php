@@ -26,14 +26,13 @@ class TicketController extends ApiControllers
     public function get(Request $request)
     {
         $limit = (int)$request->get('limit', 100);
-        $offset = (int)$request->get('offset', 0);
-        $result = $this->model::with('messages')->limit($limit)->offset($offset)->get();
+        $result = $this->model::with('messages')->paginate($limit);
 
         if (!$result) {
             return $this->sendError('Not Found', 404);
         }
 
-        return $this->sendResponse(TicketResource::collection($result), 'OK', 200);
+        return TicketResource::collection($result);
     }
 
     /**
@@ -48,7 +47,7 @@ class TicketController extends ApiControllers
             return $this->sendError('Not Found', 404);
         }
 
-        return $this->sendResponse(new TicketResource($entity), 'OK', 200);
+        return new TicketResource($entity);
     }
 
     /**
