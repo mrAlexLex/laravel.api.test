@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TicketRequest;
 use App\Jobs\SendEmail;
 use App\Services\MessageService;
+use App\Services\ReqresService;
 use App\Services\TicketService;
 
 /**
@@ -22,16 +23,18 @@ class IndexController extends Controller
      */
     protected $ticketService;
     protected $messageService;
+    protected $reqresService;
 
 
     /**
      * IndexController constructor.
      * @param TicketService $ticketService
      */
-    public function __construct(TicketService $ticketService, MessageService $messageService)
+    public function __construct(TicketService $ticketService, MessageService $messageService, ReqresService $reqresService)
     {
         $this->ticketService = $ticketService;
         $this->messageService = $messageService;
+        $this->reqresService = $reqresService;
     }
 
     /**
@@ -68,7 +71,7 @@ class IndexController extends Controller
         $response = $this->ticketService->create($request);
 
         if (isset($response['success']) && $response['success']) {
-            $this->ticketService->sendRequest($response);
+            $this->reqresService->sendRequest($response);
             $this->messageService->create($request->get('message'), $response['data']['uid']);
 
             $job = (new SendEmail($request));
