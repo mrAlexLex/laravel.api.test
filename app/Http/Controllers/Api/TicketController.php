@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Requests\TicketRequest;
+use App\Http\Resources\TicketResource;
 use App\Models\Api\Ticket;
 use Illuminate\Http\Request;
 
@@ -32,7 +33,7 @@ class TicketController extends ApiControllers
             return $this->sendError('Not Found', 404);
         }
 
-        return $this->sendResponse($result, 'OK', 200);
+        return $this->sendResponse(TicketResource::collection($result), 'OK', 200);
     }
 
     /**
@@ -47,7 +48,7 @@ class TicketController extends ApiControllers
             return $this->sendError('Not Found', 404);
         }
 
-        return $this->sendResponse($entity, 'OK', 200);
+        return $this->sendResponse(new TicketResource($entity), 'OK', 200);
     }
 
     /**
