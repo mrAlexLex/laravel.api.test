@@ -5,7 +5,6 @@ namespace App\Services;
 
 
 use App\Http\Requests\TicketRequest;
-use App\Models\Reqres\ReqresCreate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -75,15 +74,5 @@ class TicketService
         return Http::withHeaders([
             'x-api-key' => Auth::user()->auth_token
         ])->delete('http://127.0.0.1:8001/api/v1/tickets/' . $id)->json();
-    }
-
-    /**
-     * @param $response
-     */
-    public function sendRequest($response)
-    {
-        $reqresResponse = new ReqresCreate();
-        $reqresResponse->requestPost($response);
-        $reqresResponse->save();
     }
 }
